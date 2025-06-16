@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devang - Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Floating Background Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-circle:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-circle:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-circle:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+            color: white;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+            animation: slideDown 1s ease 2s forwards;
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: #007aff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links li {
+            opacity: 0;
+            animation: fadeInStagger 0.5s ease forwards;
+        }
+
+        .nav-links li:nth-child(1) { animation-delay: 2.2s; }
+        .nav-links li:nth-child(2) { animation-delay: 2.4s; }
+        .nav-links li:nth-child(3) { animation-delay: 2.6s; }
+        .nav-links li:nth-child(4) { animation-delay: 2.8s; }
+        .nav-links li:nth-child(5) { animation-delay: 3.0s; }
+
+        @keyframes fadeInStagger {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1d1d1f;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #007aff;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #007aff;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(0,0,0,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(0,0,0,0.05)"/><circle cx="50" cy="10" r="1" fill="rgba(0,0,0,0.03)"/><circle cx="20" cy="80" r="1" fill="rgba(0,0,0,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: heroFadeInUp 1s ease 2.5s forwards;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            color: #6e6e73;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: heroFadeInUp 1s ease 2.8s forwards;
+        }
+
+        .hero-content .highlight {
+            color: #007aff;
+            font-weight: 600;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #007aff 0%, #5856d6 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+            animation: heroFadeInUp 1s ease 3.1s forwards;
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.4);
+        }
+
+        @keyframes heroFadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeInBounce 1s ease 3.5s forwards;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            display: block;
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(to bottom, transparent, #007aff);
+            margin: 0 auto 10px;
+        }
+
+        .scroll-indicator::after {
+            content: '⌄';
+            display: block;
+            color: #007aff;
+            font-size: 1.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInBounce {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(10px);
+            }
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .section.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #1d1d1f;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(135deg, #007aff 0%, #5856d6 100%);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #6e6e73;
+        }
+
+        .about-text h3 {
+            color: #1d1d1f;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.6s ease 0.2s;
+        }
+
+        .about-text p {
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.6s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p:nth-child(2) { transition-delay: 0.3s; }
+        .about-text p:nth-child(3) { transition-delay: 0.4s; }
+        .about-text p:nth-child(4) { transition-delay: 0.5s; }
+
+        .section.in-view .about-text h3,
+        .section.in-view .about-text p {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Workflow Section */
+        .workflow {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workflow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="workflow-pattern" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23workflow-pattern)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .workflow .section {
+            position: relative;
+            z-index: 2;
+        }
+
+        .workflow h2 {
+            color: white;
+        }
+
+        .workflow h2::after {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.8) 100%);
+        }
+
+        .workflow-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .workflow-step {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workflow-step.in-view {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .workflow-step:nth-child(1).in-view { transition-delay: 0.1s; }
+        .workflow-step:nth-child(2).in-view { transition-delay: 0.2s; }
+        .workflow-step:nth-child(3).in-view { transition-delay: 0.3s; }
+        .workflow-step:nth-child(4).in-view { transition-delay: 0.4s; }
+        .workflow-step:nth-child(5).in-view { transition-delay: 0.5s; }
+
+        .workflow-step:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .workflow-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(0, 122, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .workflow-step:hover::before {
+            opacity: 1;
+        }
+
+        .workflow-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #007aff 0%, #5856d6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover .workflow-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.4);
+        }
+
+        .workflow-step h3 {
+            color: #1d1d1f;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .workflow-step p {
+            color: #6e6e73;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .tool-tag {
+            background: #f0f0f0;
+            color: #1d1d1f;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tool-tag:hover {
+            background: #007aff;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .workflow-number {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #007aff 0%, #5856d6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Projects Section */
+        .projects {
+            background: linear-gradient(135deg, #f5f5f7 0%, #e8eaf6 100%);
+            position: relative;
+        }
+
+        .projects::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(0,122,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+            opacity: 0.5;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            transform: translateY(30px) scale(0.95);
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .project-card.in-view {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .project-card:nth-child(1).in-view { transition-delay: 0.1s; }
+        .project-card:nth-child(2).in-view { transition-delay: 0.2s; }
+        .project-card:nth-child(3).in-view { transition-delay: 0.3s; }
+        .project-card:nth-child(4).in-view { transition-delay: 0.4s; }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-image {
+            height: 250px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-image::before {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .project-image.calendar {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .project-image.dashboard {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        }
+
+        .project-image.ecommerce {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .project-image.chat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .project-content {
+            padding: 2rem;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease 0.1s;
+        }
+
+        .project-card.in-view .project-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1d1d1f;
+            transition: color 0.3s ease;
+        }
+
+        .project-card:hover .project-content h3 {
+            color: #007aff;
+        }
+
+        .project-content p {
+            color: #6e6e73;
+            line-height: 1.6;
+        }
+
+        /* Project Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.7) translateY(50px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e5e5e7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 2rem;
+            color: #1d1d1f;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #6e6e73;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            background: #f5f5f7;
+            color: #007aff;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .workflow-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .workflow-step {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .workflow-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: #007aff;
+        }
+
+        .workflow-step h3 {
+            color: #007aff;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .app-mockup {
+            width: 100%;
+            height: 300px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #e5e5e7;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Calendar App Mockups */
+        .calendar-view {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .calendar-header {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calendar-grid {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 1rem;
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            border: 1px solid #e5e5e7;
+        }
+
+        .calendar-day.event {
+            background: #007aff;
+            color: white;
+        }
+
+        .event-form {
+            background: linear-gradient(135deg, #ff8a80 0%, #ff5722 100%);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-field {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 6px;
+            padding: 0.8rem;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Dashboard App Mockups */
+        .dashboard-view {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .chart-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 1rem;
+            flex: 1;
+            position: relative;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(45deg, #007aff 0%, #5856d6 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* E-commerce App Mockups */
+        .ecommerce-view {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 60px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .checkout-form {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        /* Chat App Mockups */
+        .chat-view {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .chat-header {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chat-messages {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 1rem;
+            flex: 1;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .message {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            max-width: 70%;
+            font-size: 0.9rem;
+        }
+
+        .message.sent {
+            background: #007aff;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .message.received {
+            background: #e5e5e7;
+            color: #1d1d1f;
+            align-self: flex-start;
+        }
+
+        .chat-input {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-content p {
+            font-size: 1.2rem;
+            color: #6e6e73;
+            margin-bottom: 3rem;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.6s ease 0.2s;
+        }
+
+        .section.in-view .contact-content p {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            transform: translateY(30px) scale(0.9);
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .contact-item.in-view {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .contact-item:nth-child(1).in-view { transition-delay: 0.1s; }
+        .contact-item:nth-child(2).in-view { transition-delay: 0.2s; }
+        .contact-item:nth-child(3).in-view { transition-delay: 0.3s; }
+
+        .contact-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .contact-item h3 {
+            color: #007aff;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover h3 {
+            transform: scale(1.1);
+        }
+
+        .contact-item a {
+            color: #6e6e73;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .contact-item a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #007aff;
+            transition: width 0.3s ease;
+        }
+
+        .contact-item:hover a {
+            color: #007aff;
+        }
+
+        .contact-item:hover a::after {
+            width: 100%;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1d1d1f 0%, #2c2c2e 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section h2 {
+                font-size: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-container {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-timeline {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 1rem;
+            }
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-nav-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+        }
+
+        /* Additional Micro-animations */
+        @keyframes typewriter {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        .typing-effect {
+            display: inline-block;
+            border-right: 2px solid #007aff;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typewriter 2s steps(40) 1s forwards;
+        }
+
+        /* Glassmorphism effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        /* Particles background for hero */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(0, 122, 255, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particles 8s linear infinite;
+        }
+
+        @keyframes particles {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <h2>Loading Portfolio</h2>
+            <p>Crafting digital experiences...</p>
+        </div>
+    </div>
+
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">Devang</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#workflow">Process</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-nav-toggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <h1>Hi, I'm Devang</h1>
+            <p class="subtitle">Developer crafting <span class="highlight">digital experiences</span> in Germany</p>
+            <a href="#about" class="cta-button">Discover My Work</a>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>Developer & Innovator</h3>
+                <p>I'm Devang, a passionate developer based in Germany, dedicated to creating innovative solutions that make a difference. Currently, I'm building <strong>Super Kalam</strong>, a comprehensive platform for mock test examinations that helps students prepare for their academic goals.</p>
+                
+                <p>With a focus on clean code, user experience, and scalable solutions, I enjoy tackling complex problems and turning ideas into reality. My expertise spans full-stack development, and I'm always eager to learn new technologies and methodologies.</p>
+                
+                <p>When I'm not coding, you can find me exploring the latest tech trends, contributing to open-source projects, or enjoying the beautiful landscapes of Germany.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="section workflow">
+        <h2>My Development Process</h2>
+        <div class="workflow-timeline">
+            <div class="workflow-step">
+                <div class="workflow-number">1</div>
+                <div class="workflow-icon">🎯</div>
+                <h3>Discovery & Planning</h3>
+                <p>I start by understanding your vision, requirements, and target audience. This phase involves market research, competitor analysis, and creating a detailed project roadmap.</p>
+                <div class="workflow-tools">
+                    <span class="tool-tag">Figma</span>
+                    <span class="tool-tag">Notion</span>
+                    <span class="tool-tag">Miro</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="workflow-number">2</div>
+                <div class="workflow-icon">🎨</div>
+                <h3>Design & Prototyping</h3>
+                <p>Creating wireframes, mockups, and interactive prototypes. I focus on user experience, accessibility, and modern design principles to ensure your product stands out.</p>
+                <div class="workflow-tools">
+                    <span class="tool-tag">Figma</span>
+                    <span class="tool-tag">Adobe XD</span>
+                    <span class="tool-tag">Sketch</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="workflow-number">3</div>
+                <div class="workflow-icon">⚡</div>
+                <h3>Development</h3>
+                <p>Building robust, scalable applications using modern technologies. I write clean, maintainable code following best practices and industry standards.</p>
+                <div class="workflow-tools">
+                    <span class="tool-tag">React</span>
+                    <span class="tool-tag">Node.js</span>
+                    <span class="tool-tag">TypeScript</span>
+                    <span class="tool-tag">MongoDB</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="workflow-number">4</div>
+                <div class="workflow-icon">🧪</div>
+                <h3>Testing & Optimization</h3>
+                <p>Comprehensive testing across devices and browsers. Performance optimization, security audits, and bug fixes to ensure a flawless user experience.</p>
+                <div class="workflow-tools">
+                    <span class="tool-tag">Jest</span>
+                    <span class="tool-tag">Cypress</span>
+                    <span class="tool-tag">Lighthouse</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="workflow-number">5</div>
+                <div class="workflow-icon">🚀</div>
+                <h3>Deployment & Support</h3>
+                <p>Smooth deployment to production with CI/CD pipelines. Ongoing maintenance, updates, and support to keep your application running perfectly.</p>
+                <div class="workflow-tools">
+                    <span class="tool-tag">Docker</span>
+                    <span class="tool-tag">AWS</span>
+                    <span class="tool-tag">GitHub Actions</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section projects">
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card" data-project="calendar">
+                <div class="project-image calendar">
+                    📅<br>Event Calendar
+                </div>
+                <div class="project-content">
+                    <h3>Event-Based Calendar</h3>
+                    <p>A modern calendar application with event management, scheduling, and notification features. Built with a focus on user experience and seamless integration.</p>
+                </div>
+            </div>
+
+            <div class="project-card" data-project="dashboard">
+                <div class="project-image dashboard">
+                    📊<br>Analytics Hub
+                </div>
+                <div class="project-content">
+                    <h3>Dashboard Analytics App</h3>
+                    <p>Comprehensive analytics dashboard providing real-time insights and data visualization. Features interactive charts and customizable reporting tools.</p>
+                </div>
+            </div>
+
+            <div class="project-card" data-project="ecommerce">
+                <div class="project-image ecommerce">
+                    🛍️<br>E-Commerce
+                </div>
+                <div class="project-content">
+                    <h3>E-Commerce Platform</h3>
+                    <p>Full-featured online shopping platform with payment integration, inventory management, and responsive design for optimal user experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2>Get In Touch</h2>
+        <div class="contact-content">
+            <p>I'm always excited to connect with fellow developers, potential collaborators, or anyone interested in discussing technology and innovation. Feel free to reach out!</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>✉️ Email</h3>
+                    <a href="mailto:devang.pandey7@gmail.com">devang.pandey7@gmail.com</a>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>🐙 GitHub</h3>
+                    <a href="https://github.com/devang-7" target="_blank">github.com/devang-7</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Devang. Crafted with ❤️ and ☕ in Germany.</p>
+    </footer>
+
+    <!-- Project Modals -->
+    <!-- Calendar Project Modal -->
+    <div id="calendar-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📅 Event-Based Calendar</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="workflow-container">
+                    <div class="workflow-step">
+                        <h3>Step 1: Calendar Overview</h3>
+                        <div class="app-mockup calendar-view">
+                            <div class="calendar-header">
+                                <div style="font-weight: 600;">March 2024</div>
+                                <div>📋 Events</div>
+                            </div>
+                            <div class="calendar-grid">
+                                <div class="calendar-day">1</div>
+                                <div class="calendar-day">2</div>
+                                <div class="calendar-day event">3</div>
+                                <div class="calendar-day">4</div>
+                                <div class="calendar-day">5</div>
+                                <div class="calendar-day">6</div>
+                                <div class="calendar-day">7</div>
+                                <div class="calendar-day">8</div>
+                                <div class="calendar-day">9</div>
+                                <div class="calendar-day event">10</div>
+                                <div class="calendar-day">11</div>
+                                <div class="calendar-day">12</div>
+                                <div class="calendar-day">13</div>
+                                <div class="calendar-day">14</div>
+                                <div class="calendar-day">15</div>
+                                <div class="calendar-day event">16</div>
+                                <div class="calendar-day">17</div>
+                                <div class="calendar-day">18</div>
+                                <div class="calendar-day">19</div>
+                                <div class="calendar-day">20</div>
+                            </div>
+                        </div>
+                        <p>Clean, intuitive calendar view with visual event indicators. Users can quickly see their schedule at a glance.</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <h3>Step 2: Create New Event</h3>
+                        <div class="app-mockup event-form">
+                            <input type="text" class="form-field" placeholder="Event Title" value="Team Meeting">
+                            <input type="date" class="form-field" value="2024-03-15">
+                            <input type="time" class="form-field" value="14:00">
+                            <textarea class="form-field" placeholder="Description">Quarterly planning session</textarea>
+                            <select class="form-field">
+                                <option>Work</option>
+                                <option>Personal</option>
+                                <option>Meeting</option>
+                            </select>
+                            <button class="btn-primary">Create Event</button>
+                        </div>
+                        <p>Streamlined event creation with smart categorization and reminder options.</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <h3>Step 3: Event Details</h3>
+                        <div class="app-mockup calendar-view">
+                            <div class="calendar-header">
+                                <div style="font-weight: 600;">📅 Team Meeting</div>
+                                <div>✏️ Edit</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.95); border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                                <div style="margin-bottom: 0.5rem;"><strong>Date:</strong> March 15, 2024</div>
+                                <div style="margin-bottom: 0.5rem;"><strong>Time:</strong> 2:00 PM - 3:00 PM</div>
+                                <div style="margin-bottom: 0.5rem;"><strong>Category:</strong> Work</div>
+                                <div style="margin-bottom: 0.5rem;"><strong>Reminder:</strong> 15 minutes before</div>
+                                <div><strong>Notes:</strong> Quarterly planning session</div>
+                            </div>
+                        </div>
+                        <p>Detailed event view with all relevant information and editing capabilities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Project Modal -->
+    <div id="dashboard-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Analytics Dashboard</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="workflow-container">
+                    <div class="workflow-step">
+                        <h3>Step 1: Dashboard Overview</h3>
+                        <div class="app-mockup dashboard-view">
+                            <div class="dashboard-header">
+                                <div style="font-weight: 600;">Analytics Dashboard</div>
+                                <div>📅 Mar 2024</div>
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #007aff;">42.3K</div>
+                                    <div style="font-size: 0.9rem; color: #6e6e73;">Page Views</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #34c759;">89.2%</div>
+                                    <div style="font-size: 0.9rem; color: #6e6e73;">Conversion</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #ff9500;">$12.4K</div>
+                                    <div style="font-size: 0.9rem; color: #6e6e73;">Revenue</div>
+                                </div>
+                            </div>
+                            <div class="chart-area">
+                                <div class="chart-placeholder">📈 Interactive Charts</div>
+                            </div>
+                        </div>
+                        <p>Real-time dashboard with key performance indicators and interactive visualizations.</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <h3>Step 2: Detailed Analytics</h3>
+                        <div class="app-mockup dashboard-view">
+                            <div class="dashboard-header">
+                                <div style="font-weight: 600;">Traffic Analysis</div>
+                                <div>🔄 Real-time</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.95); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Direct Traffic</span>
+                                    <span style="color: #007aff; font-weight: 600;">45%</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Social Media</span>
+                                    <span style="color: #34c759; font-weight: 600;">32%</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Search Engines</span>
+                                    <span style="color: #ff9500; font-weight: 600;">23%</span>
+                                </div>
+                            </div>
+                            <div class="chart-area">
+                                <div class="chart-placeholder">📊 Detailed Metrics</div>
+                            </div>
+                        </div>
+                        <p>Deep dive into analytics with traffic sources, user behavior, and conversion funnels.</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <h3>Step 3: Custom Reports</h3>
+                        <div class="app-mockup dashboard-view">
+                            <div class="dashboard-header">
+                                <div style="font-weight: 600;">Custom Report Builder</div>
+                                <div>📋 Export</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.95); border-radius: 8px; padding: 1rem;">
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Date Range:</label>
+                                    <select style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid #e5e5e7;">
+                                        <option>Last 30 days</option>
+                                        <option>Last 7 days</option>
+                                        <option>Custom range</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Metrics:</label>
+                                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                                        <label><input type="checkbox" checked> Page Views</label>
+                                        <label><input type="checkbox" checked> Users</label>
+                                        <label><input type="checkbox"> Revenue</label>
+                                    </div>
+                                </div>
+                                <button class="btn-primary" style="width: 100%;">Generate Report</button>
+                            </div>
+                        </div>
+                        <p>Customizable report generation with flexible date ranges and metric selection.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- E-commerce Project Modal -->
+    <div id="ecommerce-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🛍️ E-Commerce Platform</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="workflow-container">
+                    <div class="workflow-step">
+                        <h3>Step 1: Product Catalog</h3>
+                        <div class="app-mockup ecommerce-view">
+                            <div style="background: rgba(255,255,255,0.9); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-weight: 600;">Shop</div>
+                                <div style="display: flex; gap: 1rem;">
+                                    <span>🔍</span>
+                                    <span>🛒 3</span>
+                                </div>
+                            </div>
+                            <div class="product-grid">
+                                <div class="product-card">
+                                    <div class="product-image">👕</div>
+                                    <div style="font-size: 0.9rem; font-weight: 600;">T-Shirt</div>
+                                    <div style="color: #007aff; font-weight: 600;">$25.99</div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-image">👟</div>
+                                    <div style="font-size: 0.9rem; font-weight: 600;">Sneakers</div>
+                                    <div style="color: #007aff; font-weight: 600;">$89.99</div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-image">🎧</div>
+                                    <div style="font-size: 0.9rem; font-weight: 600;">Headphones</div>
+                                    <div style="color: #007aff; font-weight: 600;">$199.99</div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-image">📱</div>
+                                    <div style="font-size: 0.9rem; font-weight: 600;">Phone Case</div>
+                                    <div style="color: #007aff; font-weight: 600;">$15.99</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p>Clean product catalog with intuitive navigation and shopping cart functionality.</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <h3>Step 2: Product Details</h3>
+                        <div class="app-mockup ecommerce-view">
+                            <div style="background: white; border-radius: 8px; padding: 1rem;">
+                                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                    <div style="flex: 1; background: #f0f0f0; border-radius: 8px; height: 150px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">👕</div>
+                                    <div style="flex: 1;">
+                                        <h3 style="margin-bottom: 0.5rem;">Premium T-Shirt</h3>
+                                        <div style="color: #007aff; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">$25.99</div>
+                                        <div style="margin-bottom: 1rem;">
+                                            <label style="display: block; margin-bottom: 0.5rem;">Size:</label>
+                                            <select style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid #e5e5e7;">
+                                                <option>Small</option>
+                                                <option>Medium</option>
+                                                <option>Large</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn-primary" style="width: 100%;">Add to Cart</button>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 1rem;">
+                                    <p style="color: #6e6e73; font-size: 0.9rem;">100% cotton premium t-shirt with comfortable fit and modern design.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p>Detailed product page with high-quality images, specifications, and purchase options.</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <h3>Step 3: Checkout Process</h3>
+                        <div class="app-mockup ecommerce-view">
+                            <div class="checkout-form">
+                                <h3 style="margin-bottom: 1rem;">Checkout</h3>
+                                <div style="margin-bottom: 1rem;">
+                                    <h4 style="margin-bottom: 0.5rem;">Order Summary</h4>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span>Premium T-Shirt x1</span>
+                                        <span>$25.99</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span>Shipping</span>
+                                        <span>$5.99</span>
+                                    </div>
+                                    <hr style="margin: 0.5rem 0;">
+                                    <div style="display: flex; justify-content: space-between; font-weight: 700;">
+                                        <span>Total</span>
+                                        <span>$31.98</span>
+                                    </div>
+                                </div>
+                                <input type="email" class="form-field" placeholder="Email Address">
+                                <input type="text" class="form-field" placeholder="Card Number">
+                                <button class="btn-primary" style="width: 100%;">Complete Purchase</button>
+                            </div>
+                        </div>
+                        <p>Secure and streamlined checkout with multiple payment options and order tracking.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2000);
+        });
+
+        // Create Particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const numberOfParticles = 50;
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                particle.style.width = particle.style.height = Math.random() * 5 + 1 + 'px';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Project Modal Functionality
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Add click events to project cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const projectType = card.getAttribute('data-project');
+                openModal(projectType + '-modal');
+            });
+        });
+
+        // Add click events to close buttons
+        document.querySelectorAll('.close-modal').forEach(closeBtn => {
+            closeBtn.addEventListener('click', () => {
+                const modal = closeBtn.closest('.modal');
+                closeModal(modal);
+            });
+        });
+
+        // Close modal when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const activeModal = document.querySelector('.modal.active');
+                if (activeModal) {
+                    closeModal(activeModal);
+                }
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll with parallax effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+
+            if (scrolled > 50) {
+                nav.style.background = 'rgba(255, 255, 255, 0.95)';
+                nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                nav.style.background = 'rgba(255, 255, 255, 0.8)';
+                nav.style.boxShadow = 'none';
+            }
+
+            // Parallax effect for floating elements
+            const floatingElements = document.querySelectorAll('.floating-circle');
+            floatingElements.forEach((element, index) => {
+                const speed = (index + 1) * 0.1;
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    
+                    // Animate child elements for project cards, contact items, and workflow steps
+                    const cards = entry.target.querySelectorAll('.project-card, .contact-item, .workflow-step');
+                    cards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('in-view');
+                        }, index * 100);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections for animations
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Project cards enhanced hover effect
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', function(e) {
+                this.style.transform = 'translateY(-15px) scale(1.03) rotateY(5deg)';
+                this.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.2)';
+                this.style.filter = 'brightness(1.05)';
+            });
+            
+            card.addEventListener('mouseleave', function(e) {
+                this.style.transform = 'translateY(0) scale(1) rotateY(0deg)';
+                this.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                this.style.filter = 'brightness(1)';
+            });
+
+            // Mouse move parallax effect
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                this.style.transform = `translateY(-15px) scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+        });
+
+        // Contact items enhanced hover effect
+        document.querySelectorAll('.contact-item').forEach(item => {
+            item.addEventListener('mouseenter', function(e) {
+                this.style.transform = 'translateY(-10px) scale(1.05) rotateZ(1deg)';
+                this.style.background = 'linear-gradient(135deg, rgba(0, 122, 255, 0.05), rgba(88, 86, 214, 0.05))';
+            });
+            
+            item.addEventListener('mouseleave', function(e) {
+                this.style.transform = 'translateY(0) scale(1) rotateZ(0deg)';
+                this.style.background = 'white';
+            });
+        });
+
+        // Mobile navigation toggle
+        document.querySelector('.mobile-nav-toggle').addEventListener('click', () => {
+            console.log('Mobile menu toggle clicked');
+        });
+
+        // Initialize animations on page load
+        window.addEventListener('load', () => {
+            createParticles();
+            
+            // Add stagger animation to nav items
+            const navItems = document.querySelectorAll('.nav-links li');
+            navItems.forEach((item, index) => {
+                item.style.animationDelay = `${2.2 + index * 0.2}s`;
+            });
+
+            // Enhanced scroll indicator animation
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollIndicator) {
+                scrollIndicator.addEventListener('click', () => {
+                    document.querySelector('#about').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+
+        // Performance optimization: Reduce animations on low-end devices
+        const isLowEndDevice = navigator.hardwareConcurrency <= 2;
+        if (isLowEndDevice) {
+            document.body.classList.add('reduced-motion');
+        }
+
+        // Add Easter egg: Konami code
+        let konamiCode = [];
+        const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.keyCode);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            if (konamiCode.toString() === konamiSequence.toString()) {
+                document.body.style.background = 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)';
+                document.body.style.backgroundSize = '400% 400%';
+                document.body.style.animation = 'rainbow 3s ease infinite';
+                setTimeout(() => {
+                    document.body.style.background = '#ffffff';
+                    document.body.style.animation = 'none';
+                }, 5000);
+            }
+        });
+
+        // Add CSS for rainbow animation
+        const rainbowStyle = document.createElement('style');
+        rainbowStyle.textContent = `
+            @keyframes rainbow {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+        `;
+        document.head.appendChild(rainbowStyle);
+    </script>
+</body>
+</html>
